@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>나의 데이터 분석 포털</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/ko.js"></script>
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -61,7 +64,6 @@
       color: #777;
       margin-top: 6px;
     }
-
     .memo-container {
       margin-top: 60px;
     }
@@ -87,7 +89,9 @@
     button:hover {
       background-color: #0056b3;
     }
-
+    .controls {
+      margin: 10px auto;
+    }
     .footer {
       font-size: 0.85em;
       margin-top: 60px;
@@ -109,28 +113,21 @@
   <div class="time" id="current-time">🕒 시간 로딩 중...</div>
 
   <div class="grid">
-    <!-- 카드: 정규성 검정기 -->
     <div class="card">
       <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
       <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
       <div class="caption">📈 직접 제작한 통계 분석 앱</div>
     </div>
-
-    <!-- 카드: CHAMC 웹메일 -->
     <div class="card">
       <img src="https://gw.chamc.co.kr/favicon.ico" alt="Webmail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
       <a href="https://gw.chamc.co.kr/app/mail" target="_blank">차병원 웹메일</a>
       <div class="caption">📨 사내 커뮤니케이션</div>
     </div>
-
-    <!-- 카드: Google Colab -->
     <div class="card">
       <img src="https://colab.research.google.com/favicon.ico" alt="Google Colab">
       <a href="https://colab.research.google.com" target="_blank">Google Colab</a>
       <div class="caption">📊 Python / R 실험 공간</div>
     </div>
-
-    <!-- 카드: Posit Cloud -->
     <div class="card">
       <img src="https://posit.co/favicon.ico" alt="Posit Cloud">
       <a href="https://posit.cloud" target="_blank">Posit Cloud</a>
@@ -138,7 +135,6 @@
     </div>
   </div>
 
-  <!-- 메모장 -->
   <div class="memo-container">
     <h2>📝 나의 메모장</h2>
     <textarea id="memo" placeholder="여기에 메모를 작성하세요..."></textarea><br>
@@ -146,13 +142,22 @@
     <button onclick="clearNote()">🧹 비우기</button>
   </div>
 
-  <!-- 하단 정보 -->
+  <h2 style="margin-top:60px;">📆 나의 일정 캘린더</h2>
+  <p>제목과 날짜를 입력하고 일정을 추가하세요.<br>캘린더 일정을 클릭하면 삭제됩니다.</p>
+
+  <div class="controls">
+    <input type="text" id="eventTitle" placeholder="일정 제목">
+    <input type="date" id="eventDate">
+    <button onclick="addEvent()">➕ 일정 추가</button>
+  </div>
+
+  <div id="calendar" style="max-width:900px; margin:30px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);"></div>
+
   <div class="footer">
     마지막 업데이트: 2025년 4월 15일 · 
     <a href="https://github.com/chafertilytics/chafertilytics" target="_blank">GitHub에서 보기</a>
   </div>
 
-  <!-- JavaScript -->
   <script>
     // 현재 시간 출력
     function updateTime() {
@@ -183,6 +188,51 @@
         localStorage.removeItem("myMemo");
         memoBox.value = "";
       }
+    }
+
+    // --- 캘린더 기능 추가 ---
+    let calendar;
+    function getStoredEvents() {
+      const saved = localStorage.getItem("myEvents");
+      return saved ? JSON.parse(saved) : [];
+    }
+    function storeEvents(events) {
+      localStorage.setItem("myEvents", JSON.stringify(events));
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      if (calendarEl) {
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale: 'ko',
+          events: getStoredEvents(),
+          eventClick: function(info) {
+            if (confirm(`"${info.event.title}" 일정을 삭제할까요?`)) {
+              info.event.remove();
+              storeEvents(calendar.getEvents().map(evt => ({
+                title: evt.title,
+                start: evt.startStr
+              })));
+            }
+          }
+        });
+        calendar.render();
+      }
+    });
+    function addEvent() {
+      const title = document.getElementById('eventTitle').value.trim();
+      const date = document.getElementById('eventDate').value;
+      if (!title || !date) {
+        alert("제목과 날짜를 입력하세요!");
+        return;
+      }
+      calendar.addEvent({ title, start: date });
+      storeEvents(calendar.getEvents().map(evt => ({
+        title: evt.title,
+        start: evt.startStr
+      })));
+      document.getElementById('eventTitle').value = "";
+      document.getElementById('eventDate').value = "";
     }
   </script>
 
