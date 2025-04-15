@@ -35,4 +35,53 @@
       width: 64px;
       height: 64px;
     }
+    .card a {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .caption {
+      font-size: 0.9em;
+      margin-top: 4px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 자주 가는 사이트</h1>
+  <div class="grid">
+    
+    <!-- 기존: 정규성 검정 앱 -->
+    <div class="card">
+      <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
+      <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
+      <div class="caption">Normality + 모수/비모수 분석</div>
+    </div>
+
+    <!-- 기존: 차병원 웹메일 -->
+    <div class="card">
+      <img src="https://gw.chamc.co.kr/favicon.ico" alt="CHAMC Mail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
+      <a href="https://gw.chamc.co.kr/app/mail" target="_blank">차병원 웹메일</a>
+      <div class="caption">📧 내부메일 로그인</div>
+    </div>
+
+    <!-- 추가: Google Colab -->
+    <div class="card">
+      <img src="https://colab.research.google.com/favicon.ico" alt="Google Colab">
+      <a href="https://colab.research.google.com" target="_blank">Google Colab</a>
+      <div class="caption">💻 Python & R 웹 노트북</div>
+    </div>
+
+    <!-- 추가: Posit Cloud -->
+    <div class="card">
+      <img src="https://posit.co/favicon.ico" alt="Posit Cloud">
+      <a href="https://posit.cloud" target="_blank">Posit Cloud</a>
+      <div class="caption">📊 웹 기반 RStudio</div>
+    </div>
+
+  </div>
+</body>
+</html>
 
