@@ -51,7 +51,6 @@
       margin-top: 6px;
     }
 
-    /* 메모장, 체크리스트, 캘린더 3단 레이아웃 */
     .section-3col {
       display: flex;
       gap: 30px;
@@ -94,14 +93,14 @@
       list-style: none;
       padding-left: 0;
     }
-    .calendar-controls input {
+    #todo-list li {
       margin-bottom: 8px;
-      padding: 6px;
-      width: 85%;
-      font-size: 14px;
     }
-    #calendar {
-      margin-top: 10px;
+    #todo-list button {
+      background-color: #dc3545;
+      margin-left: 10px;
+      padding: 4px 10px;
+      font-size: 12px;
     }
     .footer {
       margin-top: 60px;
@@ -172,7 +171,7 @@
   </div>
 
   <script>
-    // 메모장 기능
+    // 메모장
     const memoBox = document.getElementById("memo");
     window.onload = () => {
       const saved = localStorage.getItem("myMemo");
@@ -190,14 +189,20 @@
       }
     }
 
-    // 체크리스트 기능
+    // 할 일 목록
     function loadTasks() {
       const saved = JSON.parse(localStorage.getItem("myTasks") || "[]");
       const list = document.getElementById("todo-list");
       list.innerHTML = "";
       saved.forEach((task, index) => {
         const li = document.createElement("li");
-        li.innerHTML = `<label><input type="checkbox" ${task.done ? "checked" : ""} onchange="toggleTask(${index})"> ${task.text}</label>`;
+        li.innerHTML = `
+          <label>
+            <input type="checkbox" ${task.done ? "checked" : ""} onchange="toggleTask(${index})"> 
+            ${task.text}
+          </label>
+          <button onclick="deleteTask(${index})">❌</button>
+        `;
         list.appendChild(li);
       });
     }
@@ -217,8 +222,14 @@
       localStorage.setItem("myTasks", JSON.stringify(tasks));
       loadTasks();
     }
+    function deleteTask(index) {
+      const tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
+      tasks.splice(index, 1);
+      localStorage.setItem("myTasks", JSON.stringify(tasks));
+      loadTasks();
+    }
 
-    // 캘린더 기능
+    // 캘린더
     let calendar;
     function getStoredEvents() {
       const saved = localStorage.getItem("myEvents");
