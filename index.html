@@ -2,23 +2,29 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>나의 즐겨찾기</title>
+  <title>나의 즐겨찾기 포털</title>
   <style>
     body {
       font-family: 'Apple SD Gothic Neo', sans-serif;
-      background-color: #f8f9fa;
+      background-color: #f4f6f8;
       text-align: center;
-      padding-top: 40px;
+      padding: 40px;
     }
     h1 {
       font-size: 2em;
+    }
+    .time {
+      font-size: 1.2em;
+      margin-top: -20px;
       margin-bottom: 30px;
+      color: #444;
     }
     .grid {
       display: flex;
       justify-content: center;
       gap: 40px;
       flex-wrap: wrap;
+      margin-bottom: 50px;
     }
     .card {
       width: 180px;
@@ -47,41 +53,106 @@
       margin-top: 4px;
       color: #555;
     }
+    .memo-container {
+      margin-top: 60px;
+    }
+    textarea {
+      width: 80%;
+      height: 200px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>🌐 자주 가는 사이트</h1>
+
+  <h1>📁 나의 즐겨찾기 포털</h1>
+  <div class="time" id="current-time"></div>
+
   <div class="grid">
-    
-    <!-- 기존: 정규성 검정 앱 -->
+    <!-- 기존 카드들 유지 -->
     <div class="card">
       <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
       <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
-      <div class="caption">Normality + 모수/비모수 분석</div>
+      <div class="caption">Normality + 통계 분석</div>
     </div>
 
-    <!-- 기존: 차병원 웹메일 -->
     <div class="card">
       <img src="https://gw.chamc.co.kr/favicon.ico" alt="CHAMC Mail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
       <a href="https://gw.chamc.co.kr/app/mail" target="_blank">차병원 웹메일</a>
-      <div class="caption">📧 내부메일 로그인</div>
+      <div class="caption">📧 내부메일</div>
     </div>
 
-    <!-- 추가: Google Colab -->
     <div class="card">
       <img src="https://colab.research.google.com/favicon.ico" alt="Google Colab">
       <a href="https://colab.research.google.com" target="_blank">Google Colab</a>
-      <div class="caption">💻 Python & R 웹 노트북</div>
+      <div class="caption">💻 Python/R 노트북</div>
     </div>
 
-    <!-- 추가: Posit Cloud -->
     <div class="card">
       <img src="https://posit.co/favicon.ico" alt="Posit Cloud">
       <a href="https://posit.cloud" target="_blank">Posit Cloud</a>
       <div class="caption">📊 웹 기반 RStudio</div>
     </div>
-
   </div>
+
+  <!-- 📝 메모장 영역 -->
+  <div class="memo-container">
+    <h2>📝 나의 메모장</h2>
+    <textarea id="memo" placeholder="여기에 메모를 작성하세요..."></textarea><br>
+    <button onclick="saveNote()">💾 저장</button>
+    <button onclick="clearNote()">🧹 비우기</button>
+  </div>
+
+  <script>
+    // 현재 날짜 & 시간 표시
+    function updateTime() {
+      const now = new Date();
+      const timeStr = now.toLocaleString('ko-KR', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      document.getElementById("current-time").innerText = `📅 ${timeStr}`;
+    }
+    setInterval(updateTime, 1000);  // 1초마다 업데이트
+    updateTime(); // 초기 실행
+
+    // 메모장 저장/불러오기
+    const memoBox = document.getElementById("memo");
+    window.onload = () => {
+      const saved = localStorage.getItem("myMemo");
+      if (saved) {
+        memoBox.value = saved;
+      }
+    };
+    function saveNote() {
+      localStorage.setItem("myMemo", memoBox.value);
+      alert("메모가 저장되었습니다!");
+    }
+    function clearNote() {
+      if (confirm("메모를 모두 지울까요?")) {
+        localStorage.removeItem("myMemo");
+        memoBox.value = "";
+      }
+    }
+  </script>
+
 </body>
 </html>
 
