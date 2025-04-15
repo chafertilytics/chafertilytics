@@ -10,24 +10,14 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f5f6fa;
+      background-color: #f7f9fc;
       text-align: center;
       padding: 40px;
       color: #333;
     }
     h1 {
-      font-size: 2.2em;
+      font-size: 2em;
       margin-bottom: 10px;
-    }
-    .intro {
-      font-size: 1.05em;
-      margin-bottom: 30px;
-      color: #555;
-    }
-    .time {
-      font-size: 1em;
-      margin-bottom: 30px;
-      color: #666;
     }
     .grid {
       display: flex;
@@ -42,10 +32,6 @@
       border-radius: 14px;
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-6px);
     }
     .card img {
       width: 64px;
@@ -64,22 +50,36 @@
       color: #777;
       margin-top: 6px;
     }
-    .memo-container {
-      margin-top: 60px;
+
+    /* 메모장, 체크리스트, 캘린더 3단 레이아웃 */
+    .section-3col {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .box {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      min-width: 320px;
+      max-width: 400px;
+      flex: 1;
     }
     textarea {
-      width: 80%;
-      height: 180px;
-      font-size: 16px;
+      width: 100%;
+      height: 150px;
       padding: 10px;
+      font-size: 15px;
       border-radius: 8px;
       border: 1px solid #ccc;
       resize: vertical;
     }
     button {
-      margin: 12px 6px;
-      padding: 10px 22px;
-      font-size: 16px;
+      margin: 6px 4px;
+      padding: 8px 18px;
+      font-size: 14px;
       border: none;
       border-radius: 6px;
       background-color: #007BFF;
@@ -89,108 +89,136 @@
     button:hover {
       background-color: #0056b3;
     }
-    .controls {
-      margin: 10px auto;
+    #todo-list {
+      text-align: left;
+      list-style: none;
+      padding-left: 0;
+    }
+    .calendar-controls input {
+      margin-bottom: 8px;
+      padding: 6px;
+      width: 85%;
+      font-size: 14px;
+    }
+    #calendar {
+      margin-top: 10px;
     }
     .footer {
-      font-size: 0.85em;
       margin-top: 60px;
+      font-size: 0.85em;
       color: #aaa;
-    }
-    .footer a {
-      color: #888;
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
   <h1>📊 나의 데이터 분석 포털</h1>
-  <p class="intro">
-    데이터 기반 분석과 자동화를 위해 구성된 개인 대시보드입니다.<br>
-    자주 사용하는 분석 도구, 노트북 환경, 통계 앱, 사내 시스템에 빠르게 접근합니다.
-  </p>
-  <div class="time" id="current-time">🕒 시간 로딩 중...</div>
+  <p style="color: #555; margin-bottom: 30px;">자주 사용하는 분석 툴과 일정·메모·할 일을 한눈에!</p>
 
+  <!-- 즐겨찾기 카드 -->
   <div class="grid">
     <div class="card">
       <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
       <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
-      <div class="caption">📈 직접 제작한 통계 분석 앱</div>
+      <div class="caption">📈 직접 만든 분석 앱</div>
     </div>
     <div class="card">
       <img src="https://gw.chamc.co.kr/favicon.ico" alt="Webmail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
       <a href="https://gw.chamc.co.kr/app/mail" target="_blank">차병원 웹메일</a>
-      <div class="caption">📨 사내 커뮤니케이션</div>
+      <div class="caption">📬 내부 메일함</div>
     </div>
     <div class="card">
       <img src="https://colab.research.google.com/favicon.ico" alt="Google Colab">
       <a href="https://colab.research.google.com" target="_blank">Google Colab</a>
-      <div class="caption">📊 Python / R 실험 공간</div>
+      <div class="caption">📊 Python / R 노트북</div>
     </div>
     <div class="card">
       <img src="https://posit.co/favicon.ico" alt="Posit Cloud">
       <a href="https://posit.cloud" target="_blank">Posit Cloud</a>
-      <div class="caption">🧪 웹 기반 RStudio 환경</div>
+      <div class="caption">🧪 웹 기반 RStudio</div>
     </div>
   </div>
 
-  <div class="memo-container">
-    <h2>📝 나의 메모장</h2>
-    <textarea id="memo" placeholder="여기에 메모를 작성하세요..."></textarea><br>
-    <button onclick="saveNote()">💾 저장</button>
-    <button onclick="clearNote()">🧹 비우기</button>
+  <!-- 메모장 + 체크리스트 + 캘린더 3단 -->
+  <div class="section-3col">
+    <!-- 메모장 -->
+    <div class="box">
+      <h2>📝 나의 메모장</h2>
+      <textarea id="memo" placeholder="자유롭게 메모를 남겨보세요"></textarea><br>
+      <button onclick="saveNote()">💾 저장</button>
+      <button onclick="clearNote()">🧹 비우기</button>
+    </div>
+
+    <!-- 체크리스트 -->
+    <div class="box">
+      <h2>✅ 오늘의 할 일</h2>
+      <ul id="todo-list"></ul>
+      <input type="text" id="new-task" placeholder="할 일 입력" style="width: 80%; padding: 6px;">
+      <button onclick="addTask()">➕ 추가</button>
+    </div>
+
+    <!-- 캘린더 -->
+    <div class="box">
+      <h2>📅 일정 캘린더</h2>
+      <input type="text" id="eventTitle" placeholder="일정 제목"><br>
+      <input type="date" id="eventDate"><br>
+      <button onclick="addEvent()">➕ 일정 추가</button>
+      <div id="calendar"></div>
+    </div>
   </div>
-
-  <h2 style="margin-top:60px;">📆 나의 일정 캘린더</h2>
-  <p>제목과 날짜를 입력하고 일정을 추가하세요.<br>캘린더 일정을 클릭하면 삭제됩니다.</p>
-
-  <div class="controls">
-    <input type="text" id="eventTitle" placeholder="일정 제목">
-    <input type="date" id="eventDate">
-    <button onclick="addEvent()">➕ 일정 추가</button>
-  </div>
-
-  <div id="calendar" style="max-width:900px; margin:30px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);"></div>
 
   <div class="footer">
-    마지막 업데이트: 2025년 4월 15일 · 
-    <a href="https://github.com/chafertilytics/chafertilytics" target="_blank">GitHub에서 보기</a>
+    마지막 업데이트: 2025년 4월 · GitHub Pages 기반
   </div>
 
   <script>
-    // 현재 시간 출력
-    function updateTime() {
-      const now = new Date();
-      const timeStr = now.toLocaleString('ko-KR', {
-        year: 'numeric', month: 'long', day: 'numeric',
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-      document.getElementById("current-time").innerText = `📅 ${timeStr}`;
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    // 메모장 저장/불러오기
+    // 메모장 기능
     const memoBox = document.getElementById("memo");
     window.onload = () => {
       const saved = localStorage.getItem("myMemo");
-      if (saved) {
-        memoBox.value = saved;
-      }
+      if (saved) memoBox.value = saved;
+      loadTasks();
     };
     function saveNote() {
       localStorage.setItem("myMemo", memoBox.value);
       alert("메모가 저장되었습니다!");
     }
     function clearNote() {
-      if (confirm("메모를 모두 지울까요?")) {
+      if (confirm("모든 메모를 비우시겠습니까?")) {
         localStorage.removeItem("myMemo");
         memoBox.value = "";
       }
     }
 
-    // --- 캘린더 기능 추가 ---
+    // 체크리스트 기능
+    function loadTasks() {
+      const saved = JSON.parse(localStorage.getItem("myTasks") || "[]");
+      const list = document.getElementById("todo-list");
+      list.innerHTML = "";
+      saved.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type="checkbox" ${task.done ? "checked" : ""} onchange="toggleTask(${index})"> ${task.text}</label>`;
+        list.appendChild(li);
+      });
+    }
+    function addTask() {
+      const input = document.getElementById("new-task");
+      const value = input.value.trim();
+      if (!value) return;
+      const tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
+      tasks.push({ text: value, done: false });
+      localStorage.setItem("myTasks", JSON.stringify(tasks));
+      input.value = "";
+      loadTasks();
+    }
+    function toggleTask(index) {
+      const tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
+      tasks[index].done = !tasks[index].done;
+      localStorage.setItem("myTasks", JSON.stringify(tasks));
+      loadTasks();
+    }
+
+    // 캘린더 기능
     let calendar;
     function getStoredEvents() {
       const saved = localStorage.getItem("myEvents");
@@ -206,6 +234,7 @@
           initialView: 'dayGridMonth',
           locale: 'ko',
           events: getStoredEvents(),
+          height: 300,
           eventClick: function(info) {
             if (confirm(`"${info.event.title}" 일정을 삭제할까요?`)) {
               info.event.remove();
@@ -223,7 +252,7 @@
       const title = document.getElementById('eventTitle').value.trim();
       const date = document.getElementById('eventDate').value;
       if (!title || !date) {
-        alert("제목과 날짜를 입력하세요!");
+        alert("제목과 날짜를 모두 입력하세요.");
         return;
       }
       calendar.addEvent({ title, start: date });
