@@ -1,16 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>나의 웹 포털</title>
+  <title>나의 즐겨찾기</title>
+  <style>
+    body {
+      font-family: 'Apple SD Gothic Neo', sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      padding-top: 40px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .card {
+      width: 180px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 64px;
+      height: 64px;
+    }
+    .card a {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .caption {
+      font-size: 0.9em;
+      margin-top: 4px;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  <h1>🌐 자주 가는 사이트 모음</h1>
-  <ul>
-    <li><a href="https://google.com" target="_blank">Google</a></li>
-    <li><a href="https://youtube.com" target="_blank">YouTube</a></li>
-    <li><a href="https://chat.openai.com" target="_blank">ChatGPT</a></li>
-  </ul>
+  <h1>🌐 자주 가는 사이트</h1>
+  <div class="grid">
+    <div class="card">
+      <img src="https://www.google.com/favicon.ico" alt="Google">
+      <a href="https://www.google.com" target="_blank">Google</a>
+    </div>
+    <div class="card">
+      <img src="https://www.youtube.com/favicon.ico" alt="YouTube">
+      <a href="https://www.youtube.com" target="_blank">YouTube</a>
+    </div>
+    <div class="card">
+      <img src="https://chat.openai.com/favicon.ico" alt="ChatGPT">
+      <a href="https://chat.openai.com" target="_blank">ChatGPT</a>
+    </div>
+    <div class="card">
+      <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
+      <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
+      <div class="caption">Normality + 모수/비모수 분석</div>
+    </div>
+  </div>
 </body>
 </html>
 
