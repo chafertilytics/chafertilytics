@@ -2,40 +2,47 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>나의 즐겨찾기 포털</title>
+  <title>나의 데이터 분석 포털</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Apple SD Gothic Neo', sans-serif;
-      background-color: #f4f6f8;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f5f6fa;
       text-align: center;
       padding: 40px;
+      color: #333;
     }
     h1 {
-      font-size: 2em;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+    .intro {
+      font-size: 1.05em;
+      margin-bottom: 30px;
+      color: #555;
     }
     .time {
-      font-size: 1.2em;
-      margin-top: -20px;
+      font-size: 1em;
       margin-bottom: 30px;
-      color: #444;
+      color: #666;
     }
     .grid {
       display: flex;
       justify-content: center;
-      gap: 40px;
+      gap: 30px;
       flex-wrap: wrap;
-      margin-bottom: 50px;
+      margin-bottom: 60px;
     }
     .card {
-      width: 180px;
+      width: 200px;
       background: white;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: 0.3s;
     }
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
     }
     .card img {
       width: 64px;
@@ -46,19 +53,21 @@
       margin-top: 10px;
       font-weight: bold;
       color: #007BFF;
+      font-size: 1.05em;
       text-decoration: none;
     }
     .caption {
       font-size: 0.9em;
-      margin-top: 4px;
-      color: #555;
+      color: #777;
+      margin-top: 6px;
     }
+
     .memo-container {
       margin-top: 60px;
     }
     textarea {
       width: 80%;
-      height: 200px;
+      height: 180px;
       font-size: 16px;
       padding: 10px;
       border-radius: 8px;
@@ -66,8 +75,8 @@
       resize: vertical;
     }
     button {
-      margin: 10px 5px;
-      padding: 10px 20px;
+      margin: 12px 6px;
+      padding: 10px 22px;
       font-size: 16px;
       border: none;
       border-radius: 6px;
@@ -78,41 +87,58 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    .footer {
+      font-size: 0.85em;
+      margin-top: 60px;
+      color: #aaa;
+    }
+    .footer a {
+      color: #888;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
-  <h1>📁 나의 즐겨찾기 포털</h1>
-  <div class="time" id="current-time"></div>
+  <h1>📊 나의 데이터 분석 포털</h1>
+  <p class="intro">
+    데이터 기반 분석과 자동화를 위해 구성된 개인 대시보드입니다.<br>
+    자주 사용하는 분석 도구, 노트북 환경, 통계 앱, 사내 시스템에 빠르게 접근합니다.
+  </p>
+  <div class="time" id="current-time">🕒 시간 로딩 중...</div>
 
   <div class="grid">
-    <!-- 기존 카드들 유지 -->
+    <!-- 카드: 정규성 검정기 -->
     <div class="card">
       <img src="https://raw.githubusercontent.com/rstudio/shiny/main/man/figures/logo.png" alt="Shiny">
       <a href="https://chafertilytics.shinyapps.io/normality-checker/" target="_blank">정규성 + 검정기</a>
-      <div class="caption">Normality + 통계 분석</div>
+      <div class="caption">📈 직접 제작한 통계 분석 앱</div>
     </div>
 
+    <!-- 카드: CHAMC 웹메일 -->
     <div class="card">
-      <img src="https://gw.chamc.co.kr/favicon.ico" alt="CHAMC Mail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
+      <img src="https://gw.chamc.co.kr/favicon.ico" alt="Webmail" onerror="this.src='https://cdn-icons-png.flaticon.com/512/561/561127.png'">
       <a href="https://gw.chamc.co.kr/app/mail" target="_blank">차병원 웹메일</a>
-      <div class="caption">📧 내부메일</div>
+      <div class="caption">📨 사내 커뮤니케이션</div>
     </div>
 
+    <!-- 카드: Google Colab -->
     <div class="card">
       <img src="https://colab.research.google.com/favicon.ico" alt="Google Colab">
       <a href="https://colab.research.google.com" target="_blank">Google Colab</a>
-      <div class="caption">💻 Python/R 노트북</div>
+      <div class="caption">📊 Python / R 실험 공간</div>
     </div>
 
+    <!-- 카드: Posit Cloud -->
     <div class="card">
       <img src="https://posit.co/favicon.ico" alt="Posit Cloud">
       <a href="https://posit.cloud" target="_blank">Posit Cloud</a>
-      <div class="caption">📊 웹 기반 RStudio</div>
+      <div class="caption">🧪 웹 기반 RStudio 환경</div>
     </div>
   </div>
 
-  <!-- 📝 메모장 영역 -->
+  <!-- 메모장 -->
   <div class="memo-container">
     <h2>📝 나의 메모장</h2>
     <textarea id="memo" placeholder="여기에 메모를 작성하세요..."></textarea><br>
@@ -120,8 +146,15 @@
     <button onclick="clearNote()">🧹 비우기</button>
   </div>
 
+  <!-- 하단 정보 -->
+  <div class="footer">
+    마지막 업데이트: 2025년 4월 15일 · 
+    <a href="https://github.com/chafertilytics/chafertilytics" target="_blank">GitHub에서 보기</a>
+  </div>
+
+  <!-- JavaScript -->
   <script>
-    // 현재 날짜 & 시간 표시
+    // 현재 시간 출력
     function updateTime() {
       const now = new Date();
       const timeStr = now.toLocaleString('ko-KR', {
@@ -130,8 +163,8 @@
       });
       document.getElementById("current-time").innerText = `📅 ${timeStr}`;
     }
-    setInterval(updateTime, 1000);  // 1초마다 업데이트
-    updateTime(); // 초기 실행
+    setInterval(updateTime, 1000);
+    updateTime();
 
     // 메모장 저장/불러오기
     const memoBox = document.getElementById("memo");
